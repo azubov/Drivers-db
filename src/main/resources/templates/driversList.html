@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Drivers</title>
+</head>
+<body>
+
+<table border="1">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Country</th>
+            <th>Name</th>
+            <th>Birthdate</th>
+            <th>Licenses</th>
+            <th>Cars</th>
+            <th>Options</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="driver : ${drivers}">
+            <td th:text="${driver.getId()}">
+            <td th:text="${driver.getCountry()}">
+            <td th:text="${driver.getName()}">
+            <td th:text="${driver.getBirthdate()}">
+            <td>
+                <a th:href="@{/licenses/__${driver.id}__}">Licenses</a>
+            </td>
+            <td>
+                <a th:href="@{/cars/__${driver.id}__}">Cars</a>
+            </td>
+            <td>
+                <a th:href="@{/update/__${driver.id}__}">Update</a>
+                <a th:href="@{/delete/__${driver.id}__}">Delete</a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<br>
+<a href="/new">New Driver</a>
+
+</body>
+</html>

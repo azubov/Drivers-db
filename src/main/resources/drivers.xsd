@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="unqualified"
+           elementFormDefault="qualified"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="persons" type="PersonsType"/>
+    <xs:complexType name="CarType">
+        <xs:sequence>
+            <xs:element type="xs:string" name="id"/>
+            <xs:element type="xs:string" name="model"/>
+            <xs:element type="xs:string" name="horsepower"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:simpleType name="StatusType" final="restriction">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="VALID"/>
+            <xs:enumeration value="EXPIRED"/>
+            <xs:enumeration value="DEPRIVATION"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="LicenseType">
+        <xs:sequence>
+            <xs:element type="xs:string" name="licenseNumber"/>
+            <xs:element type="StatusType" name="status" />
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="CarsType">
+        <xs:sequence>
+            <xs:element type="CarType" name="car" maxOccurs="unbounded"
+                        minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:simpleType name="CountryType" final="restriction">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[A-Z]{2}"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="PersonType">
+        <xs:sequence>
+            <xs:element type="xs:string" name="id"/>
+            <xs:element type="CountryType" name="country"/>
+            <xs:element type="xs:string" name="name"/>
+            <xs:element type="xs:string" name="birthdate"/>
+            <xs:element type="LicensesType" name="licenses"/>
+            <xs:element type="CarsType" name="cars"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="LicensesType">
+        <xs:sequence>
+            <xs:element type="LicenseType" name="license"
+                        maxOccurs="unbounded" minOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="PersonsType">
+        <xs:sequence>
+            <xs:element type="PersonType" name="person"
+                        maxOccurs="unbounded" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>
