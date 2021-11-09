@@ -4,23 +4,23 @@ import generated.PersonType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import ru.lanit.driversdb.service.DriversService;
+import org.springframework.web.bind.annotation.*;
+import ru.lanit.driversdb.service.DriversServiceTemplateImpl;
 
 @Controller
+@RequestMapping("/db/{countryId}/drivers")
 public class DriversController {
 
-    private final DriversService service;
+    private static final String COUNTRY_ID = "/db/{countryId}";
+
+    private final DriversServiceTemplateImpl service;
 
     @Autowired
-    public DriversController(DriversService service) {
+    public DriversController(DriversServiceTemplateImpl service) {
         this.service = service;
     }
 
-    @GetMapping("/drivers")
+    @GetMapping()
     public String allDrivers(Model model) {
         model.addAttribute("drivers", service.findAll());
         return "driversList";
@@ -34,7 +34,7 @@ public class DriversController {
     @PostMapping("/new")
     public String add(@ModelAttribute("driver") PersonType driver) {
         service.save(driver);
-        return "redirect:/drivers";
+        return "redirect:" + COUNTRY_ID + "/drivers";
     }
 
     @GetMapping("/update/{id}")
@@ -43,17 +43,17 @@ public class DriversController {
         return "editDriver";
     }
 
-    @PostMapping("/update")
+    @PostMapping("/update/{id}")
     public String update(@ModelAttribute("driver") PersonType driver) {
         service.update(driver);
-        return "redirect:/drivers";
+        return "redirect:" + COUNTRY_ID + "/drivers";
     }
 
 
     @GetMapping("/delete/{id}")
     public String deleteById(@PathVariable String id) {
         service.deleteById(id);
-        return "redirect:/drivers";
+        return "redirect:" + COUNTRY_ID + "/drivers";
     }
 
 }

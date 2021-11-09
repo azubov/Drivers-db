@@ -12,18 +12,4 @@ public interface DriversService {
     List<PersonType> findAll();
     void deleteById(String id);
 
-//    LicenseType buildLicense(String licenseNumber, StatusType status);
-//    CarType buildCar(String carId, String model, String horsepower);
-//    String buildId();
-//    PersonType buildDriver(String id,
-//                           String country,
-//                           String name,
-//                           String birthdate,
-//                           LicenseType license,
-//                           CarType car);
-//
-//    PersonType buildDriverSimple(String country,
-//                                 String name,
-//                                 String birthdate);
-
 }

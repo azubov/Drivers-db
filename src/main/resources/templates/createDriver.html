@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>New Driver</title>
@@ -7,7 +7,7 @@
 <body>
 
 <h2>Creat Driver</h2>
-<form name="driver" action="/new" method="post">
+<form name="driver" th:action="@{__${#httpServletRequest.requestURI}__}" method="post">
 
     <p>Country</p>
     <input title="Country" type="text" name="country">

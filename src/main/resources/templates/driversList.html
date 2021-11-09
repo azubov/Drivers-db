@@ -25,20 +25,20 @@
             <td th:text="${driver.getName()}">
             <td th:text="${driver.getBirthdate()}">
             <td>
-                <a th:href="@{/licenses/__${driver.id}__}">Licenses</a>
+                <a th:href="@{__${#httpServletRequest.requestURI}__/license/__${driver.id}__}">Licenses</a>
             </td>
             <td>
-                <a th:href="@{/cars/__${driver.id}__}">Cars</a>
+                <a th:href="@{__${#httpServletRequest.requestURI}__/cars/__${driver.id}__}">Cars</a>
             </td>
             <td>
-                <a th:href="@{/update/__${driver.id}__}">Update</a>
-                <a th:href="@{/delete/__${driver.id}__}">Delete</a>
+                <a th:href="@{__${#httpServletRequest.requestURI}__/update/__${driver.id}__}">Update</a>
+                <a th:href="@{__${#httpServletRequest.requestURI}__/delete/__${driver.id}__}">Delete</a>
             </td>
         </tr>
     </tbody>
 </table>
 <br>
-<a href="/new">New Driver</a>
+<a th:href="@{__${#httpServletRequest.requestURI}__/new}">New Driver</a>
 
 </body>
 </html>
