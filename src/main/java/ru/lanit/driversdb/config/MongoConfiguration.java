@@ -7,13 +7,20 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import ru.lanit.driversdb.filter.ConnectionStorage;
 
+import java.io.IOException;
+
 @Configuration
 public class MongoConfiguration {
 
     @Bean
     @Lazy
-    public MongoTemplate mongoTemplate() {
+    public MongoTemplate mongoTemplate() throws IOException {
         ConnectionString connectionString = new ConnectionString(ConnectionStorage.getConnection());
-        return new MongoTemplate(new DatabaseConfiguration(connectionString));
+        DatabaseConfiguration databaseConfiguration = new DatabaseConfiguration(connectionString);
+        MongoTemplate template = new MongoTemplate(databaseConfiguration);
+
+        new DebeziumConnectorConfig(connectionString.getDatabase());
+
+        return template;
     }
 }

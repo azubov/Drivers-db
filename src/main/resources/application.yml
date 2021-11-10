@@ -1,0 +1,25 @@
+server:
+  port: 8080
+
+sourceCountry:
+  datasource:
+    host: localhost
+    port: 27017
+#    database: ca
+    username:
+    password:
+
+spring:
+  datasource:
+    url: mongodb://localhost:27017/us
+
+logging:
+  level:
+    root: INFO
+    io:
+      debezium:
+        mysql:
+          BinlogReader: INFO
+    com:
+      baeldung:
+        libraries:

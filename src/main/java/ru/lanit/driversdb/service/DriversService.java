@@ -1,8 +1,9 @@
 package ru.lanit.driversdb.service;
 
 import generated.PersonType;
-
+import io.debezium.data.Envelope.Operation;
 import java.util.List;
+import java.util.Map;
 
 public interface DriversService {
 
@@ -11,5 +12,6 @@ public interface DriversService {
     void update(PersonType driver);
     List<PersonType> findAll();
     void deleteById(String id);
+    void replicateData(Map<String, Object> driversData, Operation operation);
 
 }
