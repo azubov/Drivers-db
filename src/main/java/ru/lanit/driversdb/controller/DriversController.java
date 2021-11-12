@@ -2,9 +2,13 @@ package ru.lanit.driversdb.controller;
 
 import generated.PersonType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.web.bind.annotation.*;
+import ru.lanit.driversdb.service.DriversService;
 import ru.lanit.driversdb.service.DriversServiceTemplateImpl;
 
 @Controller
@@ -12,12 +16,13 @@ import ru.lanit.driversdb.service.DriversServiceTemplateImpl;
 public class DriversController {
 
     private static final String COUNTRY_ID = "/db/{countryId}";
-
-    private final DriversServiceTemplateImpl service;
+    private final DriversService service;
+    private KafkaTemplate<Long, PersonType> kafkaTemplate;
 
     @Autowired
-    public DriversController(DriversServiceTemplateImpl service) {
+    public DriversController(DriversService service, KafkaTemplate<Long, PersonType> kafkaTemplate) {
         this.service = service;
+        this.kafkaTemplate = kafkaTemplate;
     }
 
     @GetMapping()
@@ -34,6 +39,13 @@ public class DriversController {
     @PostMapping("/new")
     public String add(@ModelAttribute("driver") PersonType driver) {
         service.save(driver);
+
+        Long msgId = 686L;
+        PersonType msg = driver;
+        ListenableFuture<SendResult<Long, PersonType>> future = kafkaTemplate.send("msg", msgId, msg);
+        future.addCallback(System.out::println, System.err::println);
+        kafkaTemplate.flush();
+
         return "redirect:" + COUNTRY_ID + "/drivers";
     }
 
