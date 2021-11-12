@@ -17,10 +17,6 @@ public class MongoConfiguration {
     public MongoTemplate mongoTemplate() throws IOException {
         ConnectionString connectionString = new ConnectionString(ConnectionStorage.getConnection());
         DatabaseConfiguration databaseConfiguration = new DatabaseConfiguration(connectionString);
-        MongoTemplate template = new MongoTemplate(databaseConfiguration);
-
-        new DebeziumConnectorConfig(connectionString.getDatabase());
-
-        return template;
+        return new MongoTemplate(databaseConfiguration);
     }
 }
