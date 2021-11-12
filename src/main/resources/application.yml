@@ -3,3 +3,9 @@ spring:
     consumer:
       group-id: app.1
     bootstrap-servers: localhost:9092
+  data:
+    mongodb:
+      ca:
+        uri: mongodb://localhost:27017/ca
+      us:
+        uri: mongodb://localhost:27017/us
