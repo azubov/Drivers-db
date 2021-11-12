@@ -8,21 +8,26 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.web.bind.annotation.*;
+import ru.lanit.driversdb.service.DriversService;
 import ru.lanit.driversdb.service.PrimaryDriversServiceImpl;
 import ru.lanit.driversdb.service.SecondaryDriversServiceImpl;
 
 @Controller
-@RequestMapping("/db/us/drivers")
-public class SecondaryDriversController {
+@RequestMapping("/{countryDb}/drivers")
+public class DriversController {
 
-    private static final String COUNTRY_ID = "/db/us";
-    private final SecondaryDriversServiceImpl service;
-    private KafkaTemplate<Long, PersonType> kafkaTemplate;
+    private String countryDb = "{countryDb}";
+    private DriversService service;
+    private KafkaTemplate<String, PersonType> kafkaTemplate;
+    private String topic;
 
     @Autowired
-    public SecondaryDriversController(SecondaryDriversServiceImpl service, KafkaTemplate<Long, PersonType> kafkaTemplate) {
-        this.service = service;
+    public DriversController(PrimaryDriversServiceImpl primaryDriversService,
+                             SecondaryDriversServiceImpl secondaryDriversService,
+                             KafkaTemplate<String, PersonType> kafkaTemplate) {
+        this.service = pickService(primaryDriversService, secondaryDriversService);
         this.kafkaTemplate = kafkaTemplate;
+        this.topic = pickTopic();
     }
 
     @GetMapping()
@@ -39,8 +44,8 @@ public class SecondaryDriversController {
     @PostMapping("/new")
     public String add(@ModelAttribute("driver") PersonType driver) {
         service.save(driver);
-        sendToKafka("secondary", 9999L, driver);
-        return "redirect:" + COUNTRY_ID + "/drivers";
+        sendToKafka(topic, "NEW", driver);
+        return "redirect:/" + countryDb + "/drivers";
     }
 
     @GetMapping("/update/{id}")
@@ -52,33 +57,33 @@ public class SecondaryDriversController {
     @PostMapping("/update/{id}")
     public String update(@ModelAttribute("driver") PersonType driver) {
         service.update(driver);
-        return "redirect:" + COUNTRY_ID + "/drivers";
+        return "redirect:/" + countryDb + "/drivers";
     }
 
 
     @GetMapping("/delete/{id}")
     public String deleteById(@PathVariable String id) {
         service.deleteById(id);
-        return "redirect:" + COUNTRY_ID + "/drivers";
+        return "redirect:/" + countryDb + "/drivers";
     }
 
-    private void sendToKafka(String topic, Long msgId, PersonType driver) {
-        LicensesType licenses = new LicensesType();
-        LicenseType license = new LicenseType();
-        license.setStatus(StatusType.VALID);
-        license.setLicenseNumber("001");
-        licenses.getLicense().add(license);
-
-        CarsType cars = new CarsType();
-        CarType car = new CarType();
-        car.setId("888");
-        car.setModel("Aston");
-        car.setHorsepower("600");
-        cars.getCar().add(car);
-
-        ListenableFuture<SendResult<Long, PersonType>> future = kafkaTemplate.send(topic, msgId, driver);
+    private void sendToKafka(String topic, String msgId, PersonType driver) {
+        ListenableFuture<SendResult<String, PersonType>> future = kafkaTemplate.send(topic, msgId, driver);
         future.addCallback(System.out::println, System.err::println);
         kafkaTemplate.flush();
+    }
+
+    private DriversService pickService(PrimaryDriversServiceImpl primaryDriversService,
+                                       SecondaryDriversServiceImpl secondaryDriversService) {
+        return isPrimary() ? primaryDriversService : secondaryDriversService;
+    }
+
+    private String pickTopic() {
+        return isPrimary() ? "primary" : "secondary";
+    }
+
+    private boolean isPrimary() {
+        return countryDb.equals("ca");
     }
 
 }

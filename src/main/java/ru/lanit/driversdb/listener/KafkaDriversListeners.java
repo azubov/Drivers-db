@@ -18,23 +18,15 @@ public class KafkaDriversListeners {
 
     @KafkaListener(topics="primary")
     public void primaryListener(ConsumerRecord<Long, PersonType> record){
-        System.out.println(record.partition());
-        System.out.println(record.key());
-        System.out.println(record.value());
-        System.out.println("PRIMARY SERVICE");
+        System.out.println("PRIMARY SERVICE ACTION:" + record.key());
         PersonType driver = record.value();
-
         secondaryService.save(driver);
     }
 
     @KafkaListener(topics="secondary")
     public void secondaryListener(ConsumerRecord<Long, PersonType> record){
-        System.out.println(record.partition());
-        System.out.println(record.key());
-        System.out.println(record.value());
-        System.out.println("SECONDARY SERVICE");
+        System.out.println("SECONDARY SERVICE ACTION:" + record.key());
         PersonType driver = record.value();
-
         primaryService.save(driver);
     }
 }
