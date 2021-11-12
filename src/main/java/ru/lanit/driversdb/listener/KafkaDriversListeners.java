@@ -6,7 +6,7 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
 @Component
-public class DriversListeners {
+public class KafkaDriversListeners {
 
     @KafkaListener(topics="msg")
     public void msgListener(ConsumerRecord<Long, PersonType> record){

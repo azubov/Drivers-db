@@ -3,7 +3,7 @@ package ru.lanit.driversdb.service;
 import generated.PersonType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.lanit.driversdb.repository.CaRepository;
+import ru.lanit.driversdb.repository.primary.PrimaryRepository;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -11,12 +11,12 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-public class DriversServiceImpl implements DriversService {
+public class PrimaryDriversServiceImpl implements DriversService {
 
-    private final CaRepository repository;
+    private final PrimaryRepository repository;
 
     @Autowired
-    public DriversServiceImpl(CaRepository repository) {
+    public PrimaryDriversServiceImpl(PrimaryRepository repository) {
         this.repository = repository;
     }
 

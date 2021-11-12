@@ -9,17 +9,18 @@ import org.springframework.ui.Model;
 import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.web.bind.annotation.*;
 import ru.lanit.driversdb.service.DriversService;
+import ru.lanit.driversdb.service.PrimaryDriversServiceImpl;
 
 @Controller
-@RequestMapping("/db/{countryId}/drivers")
-public class DriversController {
+@RequestMapping("/db/ca/drivers")
+public class PrimaryDriversController {
 
-    private static final String COUNTRY_ID = "/db/{countryId}";
-    private final DriversService service;
+    private static final String COUNTRY_ID = "/db/ca";
+    private final PrimaryDriversServiceImpl service;
     private KafkaTemplate<Long, PersonType> kafkaTemplate;
 
     @Autowired
-    public DriversController(DriversService service, KafkaTemplate<Long, PersonType> kafkaTemplate) {
+    public PrimaryDriversController(PrimaryDriversServiceImpl service, KafkaTemplate<Long, PersonType> kafkaTemplate) {
         this.service = service;
         this.kafkaTemplate = kafkaTemplate;
     }

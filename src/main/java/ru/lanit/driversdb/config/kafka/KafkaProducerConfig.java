@@ -1,4 +1,4 @@
-package ru.lanit.driversdb.kafka;
+package ru.lanit.driversdb.config.kafka;
 
 import generated.PersonType;
 import org.apache.kafka.clients.producer.ProducerConfig;

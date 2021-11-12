@@ -1,9 +1,8 @@
-package ru.lanit.driversdb.kafka;
+package ru.lanit.driversdb.config.kafka;
 
 import generated.PersonType;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.LongDeserializer;
-import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
