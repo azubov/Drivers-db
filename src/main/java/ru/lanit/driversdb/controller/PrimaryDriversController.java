@@ -40,24 +40,24 @@ public class PrimaryDriversController {
     public String add(@ModelAttribute("driver") PersonType driver) {
         service.save(driver);
 
-//        Long msgId = 686L;
-//        PersonType msg = driver;
-//        LicensesType licenses = new LicensesType();
-//        LicenseType license = new LicenseType();
-//        license.setStatus(StatusType.VALID);
-//        license.setLicenseNumber("001");
-//        licenses.getLicense().add(license);
-//
-//        CarsType cars = new CarsType();
-//        CarType car = new CarType();
-//        car.setId("888");
-//        car.setModel("Aston");
-//        car.setHorsepower("600");
-//        cars.getCar().add(car);
-//
-//        ListenableFuture<SendResult<Long, PersonType>> future = kafkaTemplate.send("msg", msgId, msg);
-//        future.addCallback(System.out::println, System.err::println);
-//        kafkaTemplate.flush();
+        Long msgId = 686L;
+        PersonType msg = driver;
+        LicensesType licenses = new LicensesType();
+        LicenseType license = new LicenseType();
+        license.setStatus(StatusType.VALID);
+        license.setLicenseNumber("001");
+        licenses.getLicense().add(license);
+
+        CarsType cars = new CarsType();
+        CarType car = new CarType();
+        car.setId("888");
+        car.setModel("Aston");
+        car.setHorsepower("600");
+        cars.getCar().add(car);
+
+        ListenableFuture<SendResult<Long, PersonType>> future = kafkaTemplate.send("primary", msgId, msg);
+        future.addCallback(System.out::println, System.err::println);
+        kafkaTemplate.flush();
 
         return "redirect:" + COUNTRY_ID + "/drivers";
     }
