@@ -39,26 +39,7 @@ public class SecondaryDriversController {
     @PostMapping("/new")
     public String add(@ModelAttribute("driver") PersonType driver) {
         service.save(driver);
-
-        Long msgId = 9999L;
-        PersonType msg = driver;
-        LicensesType licenses = new LicensesType();
-        LicenseType license = new LicenseType();
-        license.setStatus(StatusType.VALID);
-        license.setLicenseNumber("001");
-        licenses.getLicense().add(license);
-
-        CarsType cars = new CarsType();
-        CarType car = new CarType();
-        car.setId("888");
-        car.setModel("Aston");
-        car.setHorsepower("600");
-        cars.getCar().add(car);
-
-        ListenableFuture<SendResult<Long, PersonType>> future = kafkaTemplate.send("secondary", msgId, msg);
-        future.addCallback(System.out::println, System.err::println);
-        kafkaTemplate.flush();
-
+        sendToKafka("secondary", 9999L, driver);
         return "redirect:" + COUNTRY_ID + "/drivers";
     }
 
@@ -79,6 +60,25 @@ public class SecondaryDriversController {
     public String deleteById(@PathVariable String id) {
         service.deleteById(id);
         return "redirect:" + COUNTRY_ID + "/drivers";
+    }
+
+    private void sendToKafka(String topic, Long msgId, PersonType driver) {
+        LicensesType licenses = new LicensesType();
+        LicenseType license = new LicenseType();
+        license.setStatus(StatusType.VALID);
+        license.setLicenseNumber("001");
+        licenses.getLicense().add(license);
+
+        CarsType cars = new CarsType();
+        CarType car = new CarType();
+        car.setId("888");
+        car.setModel("Aston");
+        car.setHorsepower("600");
+        cars.getCar().add(car);
+
+        ListenableFuture<SendResult<Long, PersonType>> future = kafkaTemplate.send(topic, msgId, driver);
+        future.addCallback(System.out::println, System.err::println);
+        kafkaTemplate.flush();
     }
 
 }
