@@ -52,12 +52,15 @@ public class PrimaryController {
     @PostMapping("/update/{id}")
     public String update(@ModelAttribute("driver") PersonType driver) {
         service.update(driver);
+        sendToKafka(topic, "UPDATE", driver);
         return "redirect:/" + countryDb + "/drivers";
     }
 
 
     @GetMapping("/delete/{id}")
     public String deleteById(@PathVariable String id) {
+        PersonType driver = service.findById(id);
+        sendToKafka(topic, "DELETE", driver);
         service.deleteById(id);
         return "redirect:/" + countryDb + "/drivers";
     }
