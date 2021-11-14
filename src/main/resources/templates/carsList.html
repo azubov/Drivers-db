@@ -6,12 +6,15 @@
 </head>
 <body>
 
+<p>Drivers Info</p>
+
 <table border="1">
     <thead>
     <tr>
         <th>Id</th>
-        <th>Model</th>
-        <th>Horsepower</th>
+        <th>Country</th>
+        <th>Name</th>
+        <th>Birthdate</th>
     </tr>
     </thead>
     <tbody>
@@ -20,22 +23,37 @@
         <td th:text="${driver.getCountry()}">
         <td th:text="${driver.getName()}">
         <td th:text="${driver.getBirthdate()}">
+    </tr>
+    </tbody>
+
+</table>
+
+<p>Drivers Cars</p>
+
+<table border="1">
+    <thead>
+    <tr>
+        <th>Id</th>
+        <th>Model</th>
+        <th>Horsepower</th>
+        <th>Options</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="car : ${driver.getCars().getCar()}">
+        <td th:text="${car.getId()}">
+        <td th:text="${car.getModel()}">
+        <td th:text="${car.getHorsepower()}">
         <td>
-            <a th:href="@{__${#httpServletRequest.requestURI}__/license/__${driver.id}__}">Licenses</a>
-        </td>
-        <td>
-            <a th:href="@{__${#httpServletRequest.requestURI}__/cars/__${driver.id}__}">Cars</a>
-        </td>
-        <td>
-            <a th:href="@{__${#httpServletRequest.requestURI}__/update/__${driver.id}__}">Update</a>
-            <a th:href="@{__${#httpServletRequest.requestURI}__/delete/__${driver.id}__}">Delete</a>
+            <a th:href="@{__${#httpServletRequest.requestURI}__/update}">Update</a>
+            <a th:href="@{__${#httpServletRequest.requestURI}__/delete}">Delete</a>
         </td>
     </tr>
     </tbody>
 </table>
 <br>
-<a th:href="@{__${#httpServletRequest.requestURI}__/new}">New Driver</a>
-<a href="/">Back to the country list</a>
+<a th:href="@{__${#httpServletRequest.requestURI}__/new}">New Car</a>
+<a th:href="@{__${#httpServletRequest.requestURI}__/back}">Back</a>
 
 </body>
 </html>

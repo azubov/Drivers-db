@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>New Car</title>
+</head>
+<body>
+
+<h2>Creat Car</h2>
+<form name="driversCar" th:action="@{__${#httpServletRequest.requestURI}__}" method="post">
+
+    <p>Id</p>
+    <input title="Id" type="text" name="id">
+    <p>Model</p>
+    <input title="Model" type="text" name="model">
+    <p>Horsepower</p>
+    <input title="Horsepower" type="text" name="horsepower">
+
+    <button type="submit">Add Car</button>
+</form>
+
+</body>
+</html>

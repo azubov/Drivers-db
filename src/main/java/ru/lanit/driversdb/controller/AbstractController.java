@@ -1,5 +1,7 @@
 package ru.lanit.driversdb.controller;
 
+import generated.CarType;
+import generated.CarsType;
 import generated.PersonType;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
@@ -32,38 +34,66 @@ public abstract class AbstractController {
     }
 
     @GetMapping("/new")
-    public String createPage() {
+    public String createDriver() {
         return "createDriver";
     }
 
     @PostMapping("/new")
-    public String add(@ModelAttribute("driver") PersonType driver) {
+    public String addDriver(@ModelAttribute("driver") PersonType driver) {
         service.save(driver);
         sendToKafka(topic, "NEW", driver);
         return "redirect:/" + countryDb;
     }
 
     @GetMapping("/update/{id}")
-    public String edit(@PathVariable String id, Model model) {
+    public String editDriver(@PathVariable String id, Model model) {
         model.addAttribute("driver", service.findById(id));
         return "editDriver";
     }
 
     @PostMapping("/update/{id}")
-    public String update(@ModelAttribute("driver") PersonType driver) {
+    public String updateDriver(@ModelAttribute("driver") PersonType driver) {
         service.update(driver);
         sendToKafka(topic, "UPDATE", driver);
         return "redirect:/" + countryDb;
     }
 
-
     @GetMapping("/delete/{id}")
-    public String deleteById(@PathVariable String id) {
+    public String deleteDriverById(@PathVariable String id) {
         PersonType driver = service.findById(id);
         sendToKafka(topic, "DELETE", driver);
         service.deleteById(id);
         return "redirect:/" + countryDb;
     }
+
+    @GetMapping("/cars/{id}")
+    public String allCars(@PathVariable String id, Model model) {
+        model.addAttribute("driver", service.findById(id));
+        return "carsList";
+    }
+
+    @GetMapping("/cars/{id}/new")
+    public String createCar(@PathVariable String id) {
+        return "createCar";
+    }
+
+    @PostMapping("/cars/{id}/new")
+    public String addCar(@PathVariable String id, @ModelAttribute("driversCar") CarType car) {
+        PersonType driver = service.findById(id);
+        if (driver.getCars() == null) {
+            driver.setCars(new CarsType());
+        }
+        driver.getCars().getCar().add(car);
+        service.save(driver);
+        sendToKafka(topic, "UPDATE", driver);
+        return "redirect:/" + countryDb + "/cars/{id}";
+    }
+
+    @GetMapping("/cars/{id}/back")
+    public String back() {
+        return "redirect:/" + countryDb;
+    }
+
 
     private void sendToKafka(String topic, String msgId, PersonType driver) {
         ListenableFuture<SendResult<String, PersonType>> future = kafkaTemplate.send(topic, msgId, driver);
