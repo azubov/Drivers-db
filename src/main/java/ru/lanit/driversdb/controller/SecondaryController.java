@@ -1,33 +1,26 @@
 package ru.lanit.driversdb.controller;
 
-import generated.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import generated.PersonType;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.web.bind.annotation.*;
-import ru.lanit.driversdb.service.DriversService;
-import ru.lanit.driversdb.service.PrimaryDriversServiceImpl;
 import ru.lanit.driversdb.service.SecondaryDriversServiceImpl;
 
 @Controller
-@RequestMapping("/{countryDb}/drivers")
-public class DriversController {
+@RequestMapping("/us/drivers")
+public class SecondaryController {
 
-    private String countryDb = "{countryDb}";
-    private DriversService service;
-    private KafkaTemplate<String, PersonType> kafkaTemplate;
-    private String topic;
+    private final String countryDb = "us";
+    private final SecondaryDriversServiceImpl service;
+    private final KafkaTemplate<String, PersonType> kafkaTemplate;
+    private final String topic = "secondary";
 
-    @Autowired
-    public DriversController(PrimaryDriversServiceImpl primaryDriversService,
-                             SecondaryDriversServiceImpl secondaryDriversService,
-                             KafkaTemplate<String, PersonType> kafkaTemplate) {
-        this.service = pickService(primaryDriversService, secondaryDriversService);
+    public SecondaryController(SecondaryDriversServiceImpl service, KafkaTemplate<String, PersonType> kafkaTemplate) {
+        this.service = service;
         this.kafkaTemplate = kafkaTemplate;
-        this.topic = pickTopic();
     }
 
     @GetMapping()
@@ -72,18 +65,4 @@ public class DriversController {
         future.addCallback(System.out::println, System.err::println);
         kafkaTemplate.flush();
     }
-
-    private DriversService pickService(PrimaryDriversServiceImpl primaryDriversService,
-                                       SecondaryDriversServiceImpl secondaryDriversService) {
-        return isPrimary() ? primaryDriversService : secondaryDriversService;
-    }
-
-    private String pickTopic() {
-        return isPrimary() ? "primary" : "secondary";
-    }
-
-    private boolean isPrimary() {
-        return countryDb.equals("ca");
-    }
-
 }

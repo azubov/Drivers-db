@@ -1,8 +1,9 @@
 package ru.lanit.driversdb.repository.secondary;
 
+import generated.PersonType;
+import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
-import ru.lanit.driversdb.repository.DriversRepository;
 
 @Repository
-public interface SecondaryRepository extends DriversRepository {
+public interface SecondaryRepository extends MongoRepository<PersonType, String> {
 }
