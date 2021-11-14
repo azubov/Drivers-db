@@ -8,7 +8,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
 
-public abstract class AbstractService implements DriversService {
+public abstract class AbstractService implements DriversService, CarsService, LicensesService {
 
     private final MongoRepository<PersonType, String> repository;
 

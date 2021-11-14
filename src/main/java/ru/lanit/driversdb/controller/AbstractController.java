@@ -66,20 +66,20 @@ public abstract class AbstractController {
         return "redirect:/" + countryDb;
     }
 
-    @GetMapping("/cars/{id}")
-    public String allCars(@PathVariable String id, Model model) {
-        model.addAttribute("driver", service.findById(id));
+    @GetMapping("/cars/{personId}")
+    public String allCars(@PathVariable String personId, Model model) {
+        model.addAttribute("driver", service.findById(personId));
         return "carsList";
     }
 
-    @GetMapping("/cars/{id}/new")
-    public String createCar(@PathVariable String id) {
+    @GetMapping("/cars/{personId}/new")
+    public String createCar() {
         return "createCar";
     }
 
-    @PostMapping("/cars/{id}/new")
-    public String addCar(@PathVariable String id, @ModelAttribute("driversCar") CarType car) {
-        PersonType driver = service.findById(id);
+    @PostMapping("/cars/{personId}/new")
+    public String addCar(@PathVariable String personId, @ModelAttribute("driversCar") CarType car) {
+        PersonType driver = service.findById(personId);
         if (driver.getCars() == null) {
             driver.setCars(new CarsType());
         }
@@ -87,6 +87,27 @@ public abstract class AbstractController {
         service.save(driver);
         sendToKafka(topic, "UPDATE", driver);
         return "redirect:/" + countryDb + "/cars/{id}";
+    }
+
+    @GetMapping("/cars/{personId}/update/{carId}")
+    public String editCar(@PathVariable String personId, @PathVariable String carId, Model model) {
+        model.addAttribute("driver", service.findById(personId));
+        return "editCar";
+    }
+
+    @PostMapping("/update/{id}")
+    public String updateCar(@ModelAttribute("driver") PersonType driver) {
+        service.update(driver);
+        sendToKafka(topic, "UPDATE", driver);
+        return "redirect:/" + countryDb;
+    }
+
+    @GetMapping("/delete/{id}")
+    public String deleteCarById(@PathVariable String id) {
+        PersonType driver = service.findById(id);
+        sendToKafka(topic, "DELETE", driver);
+        service.deleteById(id);
+        return "redirect:/" + countryDb;
     }
 
     @GetMapping("/cars/{id}/back")

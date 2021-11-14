@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Cars</title>
+    <title>Licenses</title>
 </head>
 <body>
 
@@ -28,22 +28,20 @@
 
 </table>
 
-<h1>Drivers Cars</h1>
+<h1>Drivers Licenses</h1>
 
 <table border="1">
     <thead>
     <tr>
-        <th>Id</th>
-        <th>Model</th>
-        <th>Horsepower</th>
+        <th>Number</th>
+        <th>Status</th>
         <th>Options</th>
     </tr>
     </thead>
     <tbody>
-    <tr th:each="car : ${driver.getCars().getCar()}">
-        <td th:text="${car.getId()}">
-        <td th:text="${car.getModel()}">
-        <td th:text="${car.getHorsepower()}">
+    <tr th:each="car : ${driver.getLicenses().getLicense()}">
+        <td th:text="${car.getNumber()}">
+        <td th:text="${car.getStatus()}">
         <td>
             <a th:href="@{__${#httpServletRequest.requestURI}__/update}">Update</a>
             <a th:href="@{__${#httpServletRequest.requestURI}__/delete}">Delete</a>
@@ -52,7 +50,7 @@
     </tbody>
 </table>
 <br>
-<a th:href="@{__${#httpServletRequest.requestURI}__/new}">New Car</a>
+<a th:href="@{__${#httpServletRequest.requestURI}__/new}">New License</a>
 <a th:href="@{__${#httpServletRequest.requestURI}__/back}">Back</a>
 
 </body>

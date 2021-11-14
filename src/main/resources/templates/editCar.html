@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Car</title>
+</head>
+<body>
+
+<h2>Edit Car</h2>
+<form th:object="${driver}" name="driver" th:action="@{__${#httpServletRequest.requestURI}__}" method="post">
+    <p>Id</p>
+    <input title="Id" type="text" name="id" th:value="${driver.getId()}" readonly>
+    <p>Model</p>
+    <input title="Country" type="text" name="country" th:value="${driver.getCountry()}">
+    <p>Horsepower</p>
+    <input title="Name" type="text" name="name" th:value="${driver.getName()}">
+
+    <button type="submit">Update Driver</button>
+</form>
+
+</body>
+</html>
