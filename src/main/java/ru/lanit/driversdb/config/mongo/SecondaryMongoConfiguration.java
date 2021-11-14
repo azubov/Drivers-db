@@ -14,9 +14,12 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 @EnableMongoRepositories(basePackages = "ru.lanit.driversdb.repository.secondary", mongoTemplateRef = "mongoTemplateSecondary")
 public class SecondaryMongoConfiguration {
 
-    @Value("${spring.data.mongodb.secondary}")
+    @Value("${spring.data.uri.secondary}")
     private String connectionUri;
-    private String dbName = "us";
+    @Value("${spring.data.db.secondary}")
+    private String countryDb;
+    @Value("${spring.kafka.topic.secondary}")
+    private String kafkaTopic;
 
     @Bean
     public MongoClient mongoClientSecondary() {
@@ -30,6 +33,16 @@ public class SecondaryMongoConfiguration {
 
     @Bean
     public MongoTemplate mongoTemplateSecondary() throws Exception {
-        return new MongoTemplate(mongoClientSecondary(), dbName);
+        return new MongoTemplate(mongoClientSecondary(), countryDb);
+    }
+
+    @Bean
+    public String secondaryCountryDb() {
+        return countryDb;
+    }
+
+    @Bean
+    public String secondaryKafkaTopic() {
+        return kafkaTopic;
     }
 }

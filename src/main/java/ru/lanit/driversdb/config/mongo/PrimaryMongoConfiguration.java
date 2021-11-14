@@ -14,9 +14,12 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 @EnableMongoRepositories(basePackages = "ru.lanit.driversdb.repository.primary", mongoTemplateRef = "mongoTemplatePrimary")
 public class PrimaryMongoConfiguration {
 
-    @Value("${spring.data.mongodb.primary}")
+    @Value("${spring.data.uri.primary}")
     private String connectionUri;
-    private String dbName = "ca";
+    @Value("${spring.data.db.primary}")
+    private String countryDb;
+    @Value("${spring.kafka.topic.primary}")
+    private String kafkaTopic;
 
     @Bean
     public MongoClient mongoClientPrimary() {
@@ -30,7 +33,16 @@ public class PrimaryMongoConfiguration {
 
     @Bean
     public MongoTemplate mongoTemplatePrimary() throws Exception {
-        return new MongoTemplate(mongoClientPrimary(), dbName);
+        return new MongoTemplate(mongoClientPrimary(), countryDb);
     }
 
+    @Bean
+    public String primaryCountryDb() {
+        return countryDb;
+    }
+
+    @Bean
+    public String primaryKafkaTopic() {
+        return kafkaTopic;
+    }
 }
