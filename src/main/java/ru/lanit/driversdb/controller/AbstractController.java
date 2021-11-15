@@ -1,7 +1,9 @@
 package ru.lanit.driversdb.controller;
 
 import generated.CarType;
+import generated.LicenseType;
 import generated.PersonType;
+import generated.StatusType;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.ui.Model;
@@ -29,7 +31,7 @@ public abstract class AbstractController {
     @GetMapping()
     public String allDrivers(Model model) {
         model.addAttribute("drivers", service.findAll());
-        return "driversList";
+        return "listDrivers";
     }
 
     @GetMapping("/new")
@@ -44,31 +46,31 @@ public abstract class AbstractController {
         return "redirect:/" + countryDb;
     }
 
-    @GetMapping("/update/{id}")
-    public String editDriver(@PathVariable String id, Model model) {
-        model.addAttribute("driver", service.findById(id));
+    @GetMapping("/update/{driverId}")
+    public String editDriver(@PathVariable String driverId, Model model) {
+        model.addAttribute("driver", service.findById(driverId));
         return "editDriver";
     }
 
-    @PostMapping("/update/{id}")
+    @PostMapping("/update/{driverId}")
     public String updateDriver(@ModelAttribute("driver") PersonType driver) {
         service.update(driver);
         sendToKafka(topic, "UPDATE", driver);
         return "redirect:/" + countryDb;
     }
 
-    @GetMapping("/delete/{id}")
-    public String deleteDriverById(@PathVariable String id) {
-        PersonType driver = service.findById(id);
+    @GetMapping("/delete/{driverId}")
+    public String deleteDriverById(@PathVariable String driverId) {
+        PersonType driver = service.findById(driverId);
         sendToKafka(topic, "DELETE", driver);
-        service.deleteById(id);
+        service.deleteById(driverId);
         return "redirect:/" + countryDb;
     }
-
+    // CARS
     @GetMapping("/cars/{driverId}")
     public String allCars(@PathVariable String driverId, Model model) {
         model.addAttribute("driver", service.findById(driverId));
-        return "carsList";
+        return "listCars";
     }
 
     @GetMapping("/cars/{driverId}/new")
@@ -110,8 +112,29 @@ public abstract class AbstractController {
         sendToKafka(topic, "UPDATE", driver);
         return "redirect:/" + countryDb + "/cars/{driverId}";
     }
+    //LICENSES
+    @GetMapping("/licenses/{driverId}")
+    public String allLicenses(@PathVariable String driverId, Model model) {
+        model.addAttribute("driver", service.findById(driverId));
+        return "listLicenses";
+    }
 
-    @GetMapping("/cars/{id}/back")
+    @GetMapping("/licenses/{driverId}/new")
+    public String createLicense(Model model) {
+        model.addAttribute("status", StatusType.class);
+        return "createLicense";
+    }
+
+    @PostMapping("/licenses/{driverId}/new")
+    public String addLicense(@PathVariable String driverId, @ModelAttribute("license") LicenseType license) {
+        PersonType driver = service.findById(driverId);
+        service.addLicenseToDriver(driver, license);
+        service.save(driver);
+        sendToKafka(topic, "UPDATE", driver);
+        return "redirect:/" + countryDb + "/licenses/{driverId}";
+    }
+
+    @GetMapping(value={"/cars/{id}/back", "/licenses/{id}/back"})
     public String back() {
         return "redirect:/" + countryDb;
     }

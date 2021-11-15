@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>New License</title>
+</head>
+<body>
+
+<h2>Creat License</h2>
+<form th:object="${license}" th:action="@{__${#httpServletRequest.requestURI}__}" method="post">
+
+    <p>Status</p>
+    <select name="status">
+        <option th:each="element : ${status.values()}"
+                th:value="${element}"
+                th:text="${element}"></option>
+    </select>
+
+    <button type="submit">Add License</button>
+</form>
+
+</body>
+</html>

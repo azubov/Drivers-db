@@ -1,9 +1,6 @@
 package ru.lanit.driversdb.service;
 
-import generated.CarType;
-import generated.CarsType;
-import generated.LicensesType;
-import generated.PersonType;
+import generated.*;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;
@@ -61,6 +58,13 @@ public abstract class AbstractService implements DriversService {
 
     public void removeCarFromDriverById(PersonType driver, String carId) {
         driver.getCars().getCar().removeIf(carType -> carType.getId().equals(carId));
+    }
+
+    public void addLicenseToDriver(PersonType driver, LicenseType license) {
+        if (license.getLicenseNumber() == null) {
+            license.setLicenseNumber(generateUUID());
+        }
+        driver.getLicenses().getLicense().add(license);
     }
 
     private String generateUUID() {

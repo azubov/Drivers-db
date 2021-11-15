@@ -10,6 +10,6 @@ public class IndexPageController {
 
     @GetMapping
     public String countryList() {
-        return "countryList";
+        return "listCountries";
     }
 }

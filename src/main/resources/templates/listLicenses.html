@@ -33,15 +33,13 @@
 <table border="1">
     <thead>
     <tr>
-        <th>Number</th>
         <th>Status</th>
         <th>Options</th>
     </tr>
     </thead>
     <tbody>
-    <tr th:each="car : ${driver.getLicenses().getLicense()}">
-        <td th:text="${car.getNumber()}">
-        <td th:text="${car.getStatus()}">
+    <tr th:each="license : ${driver.getLicenses().getLicense()}">
+        <td th:text="${license.getStatus()}">
         <td>
             <a th:href="@{__${#httpServletRequest.requestURI}__/update}">Update</a>
             <a th:href="@{__${#httpServletRequest.requestURI}__/delete}">Delete</a>

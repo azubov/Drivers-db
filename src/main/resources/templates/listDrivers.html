@@ -25,7 +25,7 @@
             <td th:text="${driver.getName()}">
             <td th:text="${driver.getBirthdate()}">
             <td>
-                <a th:href="@{__${#httpServletRequest.requestURI}__/license/__${driver.id}__}">Licenses</a>
+                <a th:href="@{__${#httpServletRequest.requestURI}__/licenses/__${driver.id}__}">Licenses</a>
             </td>
             <td>
                 <a th:href="@{__${#httpServletRequest.requestURI}__/cars/__${driver.id}__}">Cars</a>
