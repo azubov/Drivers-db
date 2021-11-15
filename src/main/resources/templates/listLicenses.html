@@ -30,23 +30,26 @@
 
 <h1>Drivers Licenses</h1>
 
-<table border="1">
+<input type="text" id="numberInput" onkeyup="searchFunction(this.id, 'licenseTable', 0)" placeholder="Number search">
+<input type="text" id="statusInput" onkeyup="searchFunction(this.id, 'licenseTable', 1)" placeholder="Status search">
+
+<table border="1" id="licenseTable">
     <thead>
-    <tr>
-        <th>License Number</th>
-        <th>Status</th>
-        <th>Options</th>
-    </tr>
+        <tr>
+            <th>License Number</th>
+            <th>Status</th>
+            <th>Options</th>
+        </tr>
     </thead>
     <tbody>
-    <tr th:each="license : ${driver.getLicenses().getLicense()}">
-        <td th:text="${license.getLicenseNumber()}">
-        <td th:text="${license.getStatus()}">
-        <td>
-            <a th:href="@{__${#httpServletRequest.requestURI}__/update/__${license.getLicenseNumber()}__}">Update</a>
-            <a th:href="@{__${#httpServletRequest.requestURI}__/delete/__${license.getLicenseNumber()}__}">Delete</a>
-        </td>
-    </tr>
+        <tr th:each="license : ${driver.getLicenses().getLicense()}">
+            <td th:text="${license.getLicenseNumber()}">
+            <td th:text="${license.getStatus()}">
+            <td>
+                <a th:href="@{__${#httpServletRequest.requestURI}__/update/__${license.getLicenseNumber()}__}">Update</a>
+                <a th:href="@{__${#httpServletRequest.requestURI}__/delete/__${license.getLicenseNumber()}__}">Delete</a>
+            </td>
+        </tr>
     </tbody>
 </table>
 <br>
@@ -54,4 +57,28 @@
 <a th:href="@{__${#httpServletRequest.requestURI}__/back}">Back</a>
 
 </body>
+
+<script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
+<script language="javascript" type="text/javascript">
+function searchFunction(inputId, tableId, row) {
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById(inputId);
+  filter = input.value.toUpperCase();
+  table = document.getElementById(tableId);
+  tr = table.getElementsByTagName("tr");
+
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[row];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }
+  }
+}
+</script>
+
 </html>

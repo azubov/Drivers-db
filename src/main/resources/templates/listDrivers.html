@@ -6,7 +6,9 @@
 </head>
 <body>
 
-<table border="1">
+<input type="text" id="countryInput" onkeyup="searchFunction()" placeholder="Country search">
+
+<table border="1" id="driversTable">
     <thead>
         <tr>
             <th>Id</th>
@@ -42,4 +44,28 @@
 <a href="/">Back to the country list</a>
 
 </body>
+
+<script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
+<script language="javascript" type="text/javascript">
+function searchFunction() {
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("countryInput");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("driversTable");
+  tr = table.getElementsByTagName("tr");
+
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[1];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }
+  }
+}
+</script>
+
 </html>
