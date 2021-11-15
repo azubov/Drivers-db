@@ -7,10 +7,8 @@
 <body>
 
 <h2>Creat Car</h2>
-<form name="driversCar" th:action="@{__${#httpServletRequest.requestURI}__}" method="post">
+<form name="car" th:action="@{__${#httpServletRequest.requestURI}__}" method="post">
 
-    <p>Id</p>
-    <input title="Id" type="text" name="id">
     <p>Model</p>
     <input title="Model" type="text" name="model">
     <p>Horsepower</p>

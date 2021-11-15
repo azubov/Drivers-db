@@ -7,13 +7,13 @@
 <body>
 
 <h2>Edit Car</h2>
-<form th:object="${driver}" name="driver" th:action="@{__${#httpServletRequest.requestURI}__}" method="post">
+<form th:object="${car}" name="car" th:action="@{__${#httpServletRequest.requestURI}__}" method="post">
     <p>Id</p>
-    <input title="Id" type="text" name="id" th:value="${driver.getId()}" readonly>
+    <input title="Id" type="text" name="id" th:value="${car.getId()}" readonly>
     <p>Model</p>
-    <input title="Country" type="text" name="country" th:value="${driver.getCountry()}">
+    <input title="Model" type="text" name="model" th:value="${car.getModel()}">
     <p>Horsepower</p>
-    <input title="Name" type="text" name="name" th:value="${driver.getName()}">
+    <input title="Horsepower" type="text" name="horsepower" th:value="${car.getHorsepower()}">
 
     <button type="submit">Update Driver</button>
 </form>

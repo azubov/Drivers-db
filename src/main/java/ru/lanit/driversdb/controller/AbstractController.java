@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import ru.lanit.driversdb.service.DriversService;
 
+import java.util.NoSuchElementException;
+
 public abstract class AbstractController {
 
     private final DriversService service;
@@ -66,47 +68,49 @@ public abstract class AbstractController {
         return "redirect:/" + countryDb;
     }
 
-    @GetMapping("/cars/{personId}")
-    public String allCars(@PathVariable String personId, Model model) {
-        model.addAttribute("driver", service.findById(personId));
+    @GetMapping("/cars/{driverId}")
+    public String allCars(@PathVariable String driverId, Model model) {
+        model.addAttribute("driver", service.findById(driverId));
         return "carsList";
     }
 
-    @GetMapping("/cars/{personId}/new")
+    @GetMapping("/cars/{driverId}/new")
     public String createCar() {
         return "createCar";
     }
 
-    @PostMapping("/cars/{personId}/new")
-    public String addCar(@PathVariable String personId, @ModelAttribute("driversCar") CarType car) {
-        PersonType driver = service.findById(personId);
-        if (driver.getCars() == null) {
-            driver.setCars(new CarsType());
-        }
-        driver.getCars().getCar().add(car);
+    @PostMapping("/cars/{driverId}/new")
+    public String addCar(@PathVariable String driverId, @ModelAttribute("car") CarType car) {
+        PersonType driver = service.findById(driverId);
+        service.addCarToADriver(driver, car);
         service.save(driver);
         sendToKafka(topic, "UPDATE", driver);
-        return "redirect:/" + countryDb + "/cars/{id}";
+        return "redirect:/" + countryDb + "/cars/{driverId}";
     }
 
-    @GetMapping("/cars/{personId}/update/{carId}")
-    public String editCar(@PathVariable String personId, @PathVariable String carId, Model model) {
-        model.addAttribute("driver", service.findById(personId));
+    @GetMapping("/cars/{driverId}/update/{carId}")
+    public String editCar(@PathVariable String driverId, @PathVariable String carId, Model model) {
+        PersonType driver = service.findById(driverId);
+        model.addAttribute("car", service.findDriversCarById(driver, carId));
         return "editCar";
     }
 
-    @PostMapping("/update/{id}")
-    public String updateCar(@ModelAttribute("driver") PersonType driver) {
+    @PostMapping("/cars/{driverId}/update/{carId}")
+    public String updateCar(@PathVariable String driverId, @PathVariable String carId, @ModelAttribute("car") CarType car) {
+        PersonType driver = service.findById(driverId);
+        driver.getCars().getCar().removeIf(carType -> carType.getId().equals(carId));
+        driver.getCars().getCar().add(car);
         service.update(driver);
         sendToKafka(topic, "UPDATE", driver);
         return "redirect:/" + countryDb;
     }
 
-    @GetMapping("/delete/{id}")
-    public String deleteCarById(@PathVariable String id) {
-        PersonType driver = service.findById(id);
+    @GetMapping("/cars/{driverId}/delete/{carId}")
+    public String deleteCarById(@PathVariable String driverId, @PathVariable String carId) {
+        PersonType driver = service.findById(driverId);
+        driver.getCars().getCar().removeIf(carType -> carType.getId().equals(carId));
+        service.update(driver);
         sendToKafka(topic, "DELETE", driver);
-        service.deleteById(id);
         return "redirect:/" + countryDb;
     }
 

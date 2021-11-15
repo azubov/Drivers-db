@@ -1,5 +1,8 @@
 package ru.lanit.driversdb.service;
 
+import generated.CarType;
+import generated.CarsType;
+import generated.LicensesType;
 import generated.PersonType;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
@@ -8,7 +11,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
 
-public abstract class AbstractService implements DriversService, CarsService, LicensesService {
+public abstract class AbstractService implements DriversService {
 
     private final MongoRepository<PersonType, String> repository;
 
@@ -18,7 +21,9 @@ public abstract class AbstractService implements DriversService, CarsService, Li
 
     public void save(PersonType driver) {
         if (driver.getId() == null) {
-            assignId(driver);
+            driver.setId(generateUUID());
+            driver.setCars(new CarsType());
+            driver.setLicenses(new LicensesType());
         }
         repository.save(driver);
     }
@@ -41,9 +46,15 @@ public abstract class AbstractService implements DriversService, CarsService, Li
         repository.deleteById(id);
     }
 
-    private void assignId(PersonType driver) {
-        String id = generateUUID();
-        driver.setId(id);
+    public void addCarToADriver(PersonType driver, CarType car) {
+        car.setId(generateUUID());
+        driver.getCars().getCar().add(car);
+    }
+
+    public CarType findDriversCarById(PersonType driver, String carId) {
+        return driver.getCars().getCar().stream()
+                .filter(carType -> carType.getId().equals(carId))
+                .findAny().orElseThrow(NoSuchElementException::new);
     }
 
     private String generateUUID() {
