@@ -151,6 +151,15 @@ public abstract class AbstractController {
         return "redirect:/" + countryDb + "/licenses/{driverId}";
     }
 
+    @GetMapping("/licenses/{driverId}/delete/{licenseId}")
+    public String deleteLicenseById(@PathVariable String driverId, @PathVariable String licenseId) {
+        PersonType driver = service.findById(driverId);
+        service.removeLicenseFromDriverById(driver, licenseId);
+        service.update(driver);
+        sendToKafka(topic, "UPDATE", driver);
+        return "redirect:/" + countryDb + "/licenses/{driverId}";
+    }
+
 
     @GetMapping(value={"/cars/{id}/back", "/licenses/{id}/back"})
     public String back() {
