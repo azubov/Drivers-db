@@ -134,6 +134,24 @@ public abstract class AbstractController {
         return "redirect:/" + countryDb + "/licenses/{driverId}";
     }
 
+    @GetMapping("/licenses/{driverId}/update/{licenseId}")
+    public String editLicense(@PathVariable String driverId, @PathVariable String licenseId, Model model) {
+        PersonType driver = service.findById(driverId);
+        model.addAttribute("license", service.findDriversLicenseById(driver, licenseId));
+        return "editLicense";
+    }
+
+    @PostMapping("/licenses/{driverId}/update/{licenseId}")
+    public String updateLicense(@PathVariable String driverId, @PathVariable String licenseId, @ModelAttribute("license") LicenseType license) {
+        PersonType driver = service.findById(driverId);
+        service.removeLicenseFromDriverById(driver, licenseId);
+        service.addLicenseToDriver(driver, license);
+        service.update(driver);
+        sendToKafka(topic, "UPDATE", driver);
+        return "redirect:/" + countryDb + "/licenses/{driverId}";
+    }
+
+
     @GetMapping(value={"/cars/{id}/back", "/licenses/{id}/back"})
     public String back() {
         return "redirect:/" + countryDb;

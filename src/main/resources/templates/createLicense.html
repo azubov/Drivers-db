@@ -9,7 +9,7 @@
 <h2>Creat License</h2>
 <form th:object="${license}" th:action="@{__${#httpServletRequest.requestURI}__}" method="post">
 
-    <p>Status</p>
+    <p>License Status</p>
     <select name="status">
         <option th:each="element : ${status.values()}"
                 th:value="${element}"

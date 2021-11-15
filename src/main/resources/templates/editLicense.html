@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit License</title>
+</head>
+<body>
+
+<h2>Edit License</h2>
+<form th:object="${license}" name="license" th:action="@{__${#httpServletRequest.requestURI}__}" method="post">
+    <p>License Number</p>
+    <input title="LicenseNumber" type="text" name="licenseNumber" th:value="${license.getLicenseNumber()}" readonly>
+    <p>License Status</p>
+    <select th:field="*{status}">
+        <option th:each="element : ${license.getStatus.values()}"
+                th:value="${element}"
+                th:text="${element}"
+                th:selected="${element==license.getStatus()}"></option>
+    </select>
+
+    <button type="submit">Update License</button>
+</form>
+
+</body>
+</html>

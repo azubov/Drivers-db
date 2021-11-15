@@ -33,16 +33,18 @@
 <table border="1">
     <thead>
     <tr>
+        <th>License Number</th>
         <th>Status</th>
         <th>Options</th>
     </tr>
     </thead>
     <tbody>
     <tr th:each="license : ${driver.getLicenses().getLicense()}">
+        <td th:text="${license.getLicenseNumber()}">
         <td th:text="${license.getStatus()}">
         <td>
-            <a th:href="@{__${#httpServletRequest.requestURI}__/update}">Update</a>
-            <a th:href="@{__${#httpServletRequest.requestURI}__/delete}">Delete</a>
+            <a th:href="@{__${#httpServletRequest.requestURI}__/update/__${license.getLicenseNumber()}__}">Update</a>
+            <a th:href="@{__${#httpServletRequest.requestURI}__/delete/__${license.getLicenseNumber()}__}">Delete</a>
         </td>
     </tr>
     </tbody>

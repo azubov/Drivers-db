@@ -18,5 +18,7 @@ public interface DriversService {
     void removeCarFromDriverById(PersonType driver, String carId);
 
     void addLicenseToDriver(PersonType driver, LicenseType license);
+    LicenseType findDriversLicenseById(PersonType driver, String licenseId);
+    void removeLicenseFromDriverById(PersonType driver, String licenseId);
 
 }
