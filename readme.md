@@ -4,3 +4,4 @@ bin/kafka-server-start.sh config/server.properties
 sudo systemctl start mongod
 
 mvn clean compile spring-boot:run
+//
