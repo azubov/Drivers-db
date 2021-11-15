@@ -1,7 +1,6 @@
 package ru.lanit.driversdb.controller;
 
 import generated.CarType;
-import generated.CarsType;
 import generated.PersonType;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
@@ -12,8 +11,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import ru.lanit.driversdb.service.DriversService;
-
-import java.util.NoSuchElementException;
 
 public abstract class AbstractController {
 
@@ -82,7 +79,7 @@ public abstract class AbstractController {
     @PostMapping("/cars/{driverId}/new")
     public String addCar(@PathVariable String driverId, @ModelAttribute("car") CarType car) {
         PersonType driver = service.findById(driverId);
-        service.addCarToADriver(driver, car);
+        service.addCarToDriver(driver, car);
         service.save(driver);
         sendToKafka(topic, "UPDATE", driver);
         return "redirect:/" + countryDb + "/cars/{driverId}";
@@ -98,11 +95,11 @@ public abstract class AbstractController {
     @PostMapping("/cars/{driverId}/update/{carId}")
     public String updateCar(@PathVariable String driverId, @PathVariable String carId, @ModelAttribute("car") CarType car) {
         PersonType driver = service.findById(driverId);
-        driver.getCars().getCar().removeIf(carType -> carType.getId().equals(carId));
-        driver.getCars().getCar().add(car);
+        service.removeCarFromDriverById(driver, carId);
+        service.addCarToDriver(driver, car);
         service.update(driver);
         sendToKafka(topic, "UPDATE", driver);
-        return "redirect:/" + countryDb;
+        return "redirect:/" + countryDb + "/cars/{driverId}";
     }
 
     @GetMapping("/cars/{driverId}/delete/{carId}")

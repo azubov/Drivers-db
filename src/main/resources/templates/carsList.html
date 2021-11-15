@@ -45,8 +45,8 @@
         <td th:text="${car.getModel()}">
         <td th:text="${car.getHorsepower()}">
         <td>
-            <a th:href="@{__${#httpServletRequest.requestURI}__/update}">Update</a>
-            <a th:href="@{__${#httpServletRequest.requestURI}__/delete}">Delete</a>
+            <a th:href="@{__${#httpServletRequest.requestURI}__/update/__${car.getId()}__}">Update</a>
+            <a th:href="@{__${#httpServletRequest.requestURI}__/delete/__${car.getId()}__}">Delete</a>
         </td>
     </tr>
     </tbody>

@@ -12,8 +12,8 @@ public interface DriversService {
     List<PersonType> findAll();
     void deleteById(String id);
 
-    void addCarToADriver(PersonType driver, CarType car);
+    void addCarToDriver(PersonType driver, CarType car);
     CarType findDriversCarById(PersonType driver, String carId);
-
+    void removeCarFromDriverById(PersonType driver, String carId);
 
 }

@@ -46,8 +46,10 @@ public abstract class AbstractService implements DriversService {
         repository.deleteById(id);
     }
 
-    public void addCarToADriver(PersonType driver, CarType car) {
-        car.setId(generateUUID());
+    public void addCarToDriver(PersonType driver, CarType car) {
+        if (car.getId() == null) {
+            car.setId(generateUUID());
+        }
         driver.getCars().getCar().add(car);
     }
 
@@ -55,6 +57,10 @@ public abstract class AbstractService implements DriversService {
         return driver.getCars().getCar().stream()
                 .filter(carType -> carType.getId().equals(carId))
                 .findAny().orElseThrow(NoSuchElementException::new);
+    }
+
+    public void removeCarFromDriverById(PersonType driver, String carId) {
+        driver.getCars().getCar().removeIf(carType -> carType.getId().equals(carId));
     }
 
     private String generateUUID() {
