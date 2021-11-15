@@ -105,10 +105,10 @@ public abstract class AbstractController {
     @GetMapping("/cars/{driverId}/delete/{carId}")
     public String deleteCarById(@PathVariable String driverId, @PathVariable String carId) {
         PersonType driver = service.findById(driverId);
-        driver.getCars().getCar().removeIf(carType -> carType.getId().equals(carId));
+        service.removeCarFromDriverById(driver, carId);
         service.update(driver);
-        sendToKafka(topic, "DELETE", driver);
-        return "redirect:/" + countryDb;
+        sendToKafka(topic, "UPDATE", driver);
+        return "redirect:/" + countryDb + "/cars/{driverId}";
     }
 
     @GetMapping("/cars/{id}/back")
