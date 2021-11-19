@@ -5,14 +5,14 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
-import ru.lanit.driversdb.service.DriversService;
-import ru.lanit.driversdb.service.PrimaryDriversServiceImpl;
+import ru.lanit.driversdb.service.drivers.DriversService;
+import ru.lanit.driversdb.service.drivers.DriversServiceImpl;
 
 @Component
 public class KafkaDriversListener {
 
     @Autowired
-    private PrimaryDriversServiceImpl primaryService;
+    private DriversServiceImpl primaryService;
 
     @KafkaListener(topics="primary")
     public void primaryListener(ConsumerRecord<String, PersonType> record){
