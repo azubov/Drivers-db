@@ -25,16 +25,6 @@ public class KafkaConsumerConfig {
     private String kafkaGroupId;
 
     @Bean
-    public Map<String, Object> consumerConfigs() {
-        Map<String, Object> props = new HashMap<>();
-        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaServer);
-        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
-        props.put(ConsumerConfig.GROUP_ID_CONFIG, kafkaGroupId);
-        return props;
-    }
-
-    @Bean
     public KafkaListenerContainerFactory<?> kafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, PersonType> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
@@ -47,4 +37,16 @@ public class KafkaConsumerConfig {
         return new DefaultKafkaConsumerFactory<>(consumerConfigs(), new StringDeserializer(),
                 new JsonDeserializer<>(PersonType.class));
     }
+
+    @Bean
+    public Map<String, Object> consumerConfigs() {
+        Map<String, Object> props = new HashMap<>();
+        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaServer);
+        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, kafkaGroupId);
+        return props;
+    }
+
+
 }

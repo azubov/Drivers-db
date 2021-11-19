@@ -7,10 +7,11 @@ import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 import org.springframework.kafka.annotation.EnableKafka;
 
 @EnableKafka
-@SpringBootApplication(exclude = {
-        MongoAutoConfiguration.class,
-        MongoDataAutoConfiguration.class
-})
+@SpringBootApplication
+//@SpringBootApplication(exclude = {
+//        MongoAutoConfiguration.class,
+//        MongoDataAutoConfiguration.class
+//})
 public class DriversDbApplication {
 
     public static void main(String[] args) {

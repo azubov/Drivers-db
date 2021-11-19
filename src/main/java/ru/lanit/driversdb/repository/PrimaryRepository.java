@@ -1,4 +1,4 @@
-package ru.lanit.driversdb.repository.primary;
+package ru.lanit.driversdb.repository;
 
 import generated.PersonType;
 import org.springframework.data.mongodb.repository.MongoRepository;

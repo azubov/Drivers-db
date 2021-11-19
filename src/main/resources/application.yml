@@ -3,13 +3,7 @@ spring:
     uri:
       primary: mongodb://localhost:27017/ca
       secondary: mongodb://localhost:27017/us
-    db:
-      primary: ca
-      secondary: us
   kafka:
     consumer:
       group-id: app.1
     bootstrap-servers: localhost:9092
-    topic:
-      primary: primary
-      secondary: secondary

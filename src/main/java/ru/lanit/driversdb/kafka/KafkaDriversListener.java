@@ -1,4 +1,4 @@
-package ru.lanit.driversdb.listener;
+package ru.lanit.driversdb.kafka;
 
 import generated.PersonType;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -7,25 +7,17 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 import ru.lanit.driversdb.service.DriversService;
 import ru.lanit.driversdb.service.PrimaryDriversServiceImpl;
-import ru.lanit.driversdb.service.SecondaryDriversServiceImpl;
 
 @Component
-public class KafkaDriversListeners {
+public class KafkaDriversListener {
 
     @Autowired
     private PrimaryDriversServiceImpl primaryService;
-    @Autowired
-    private SecondaryDriversServiceImpl secondaryService;
 
     @KafkaListener(topics="primary")
     public void primaryListener(ConsumerRecord<String, PersonType> record){
+        System.out.println("LISTENER !!!");
         System.out.println("PRIMARY SERVICE ACTION:");
-        kafkaAction(record, secondaryService);
-    }
-
-    @KafkaListener(topics="secondary")
-    public void secondaryListener(ConsumerRecord<String, PersonType> record){
-        System.out.println("SECONDARY SERVICE ACTION:");
         kafkaAction(record, primaryService);
     }
 
